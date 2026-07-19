@@ -80,7 +80,7 @@ data/
 현재 포함된 미디어는 ffmpeg로 만든 **placeholder**다(영상 10개 = WebM, 라디오 5개,
 튜닝 3개). 실제 파일로 교체하려면 파일을 폴더에 넣고 manifest의 `file` 값만 맞추면
 된다. 형식은 브라우저가 재생 가능하면 무엇이든 된다 — 전시(Raspberry Pi)용 권장:
-**H.264 MP4 1024×600 + AAC**, 라디오는 MP3.
+**H.264 MP4 640×480(4:3) + AAC**, 라디오는 MP3.
 
 ### manifest 형식
 
@@ -97,8 +97,8 @@ data/
 ```json
 {
   "stations": [
-    { "id": "r01", "file": "radio_001.mp3", "country": "Korea", "city": "Jeju",
-      "station": "제주 시그널", "frequency": "89.1 MHz" }
+    { "id": "r01", "file": "radio_001.mp3", "country": "KR", "city": "Jeju",
+      "station": "RADIO JEJU", "frequency": "89.1 FM" }
   ],
   "effects": ["tuning_01.mp3"]
 }

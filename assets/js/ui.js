@@ -10,8 +10,7 @@ export class UIController {
     this.el = {
       station: document.getElementById("radio-station"),
       frequency: document.getElementById("radio-frequency"),
-      country: document.getElementById("radio-country"),
-      city: document.getElementById("radio-city"),
+      location: document.getElementById("radio-location"),
       signal: document.getElementById("radio-signal"),
       tuning: document.getElementById("radio-tuning"),
       lamp: document.getElementById("radio-lamp"),
@@ -66,10 +65,10 @@ export class UIController {
     }
     tuning.classList.remove("on");
     if (state === "playing" && station) {
+      // 예: MEXICO CITY, MX / RADIO UNAM / 96.1 FM
+      this.el.location.textContent = `${station.city}, ${station.country}`.toUpperCase();
       this.el.station.textContent = station.station;
       this.el.frequency.textContent = station.frequency ?? station.type ?? "";
-      this.el.country.textContent = station.country;
-      this.el.city.textContent = station.city;
       lamp.classList.add("on");
       this._startSignalAnimation(station);
     } else if (state === "error") {
