@@ -1,0 +1,20 @@
+{
+  "videoTransitionMs": 300,
+  "videoAudioFadeMs": 80,
+  "videoVolume": 1.0,
+
+  "radioVolume": 0.8,
+  "radioFadeMs": 100,
+  "tuningDurationMs": [500, 800],
+  "radioMinRemainingSec": 20,
+  "autoRadioSwitch": { "enabled": false, "minSec": 45, "maxSec": 90 },
+
+  "showControls": true,
+  "exhibitionMode": false,
+  "debug": false,
+  "cursorHideMs": 3000,
+  "useWakeLock": true,
+  "restoreLastVideo": false,
+
+  "hardwareBridge": { "enabled": false, "url": "ws://localhost:8765" }
+}

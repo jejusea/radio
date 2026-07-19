@@ -1,0 +1,12 @@
+{
+  "name": "empty-house-receiver",
+  "version": "0.1.0",
+  "private": true,
+  "description": "C — 김세아 · 여전히 빈 집에 있습니다 — 전시용 오프라인 로컬 웹앱",
+  "type": "module",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "validate": "node tools/validate-manifest.mjs",
+    "scan": "node tools/scan-media.mjs"
+  }
+}
