@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>C — 여전히 빈 집에 있습니다</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div id="app" class="state-standby">
+    <!-- 실물 케이싱과 동일한 1024:600 비율 고정 스테이지 -->
+    <div id="stage">
+
+      <!-- ================= 왼쪽: 라디오 섹션 ================= -->
+      <section id="left-section">
+        <!-- 스피커 그릴 -->
+        <div id="speaker-grille" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+
+        <!-- TFT 라디오 정보 패널 -->
+        <div id="radio-panel">
+          <div class="panel-frame">
+            <div class="panel-main">
+              <div class="panel-row">
+                <span id="radio-station" class="field-station">—</span>
+              </div>
+              <div class="panel-row">
+                <span id="radio-frequency" class="field-frequency">—</span>
+                <span id="radio-signal" class="field-signal" aria-hidden="true">
+                  <i></i><i></i><i></i><i></i><i></i>
+                </span>
+              </div>
+              <div class="panel-row panel-row-bottom">
+                <span id="radio-country" class="field-location">—</span>
+                <span class="field-sep">·</span>
+                <span id="radio-city" class="field-location">—</span>
+              </div>
+            </div>
+            <div id="radio-tuning" class="panel-tuning">TUNING<span class="dots"><i>.</i><i>.</i><i>.</i></span></div>
+          </div>
+        </div>
+
+        <!-- 라이트(램프) + 회전 다이얼 -->
+        <div id="left-bottom">
+          <div id="radio-lamp" aria-hidden="true"></div>
+          <div id="dial" title="라디오 다이얼: 드래그로 돌리기 / 좌우 클릭 / 휠 (←→)">
+            <div id="dial-knob"><i class="dial-mark"></i></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 오른쪽: 영상 섹션 ================= -->
+      <section id="right-section">
+        <!-- 영상 화면 (854×480) -->
+        <div id="video-area">
+          <video id="video-player" playsinline preload="auto"></video>
+          <div id="white-flash"></div>
+        </div>
+
+        <div id="right-bottom">
+          <!-- video info 바 -->
+          <div id="video-info">
+            <span id="video-label">—</span>
+          </div>
+
+          <!-- 영상 토글 (ON-OFF-ON, 가운데 복귀) -->
+          <div id="toggle" title="영상 토글: 위=이전 / 아래=다음 (↑↓)">
+            <div class="toggle-slot">
+              <div id="toggle-lever"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 시작 화면 ===== -->
+      <div id="start-screen">
+        <div class="start-inner">
+          <div class="start-label">SIGNAL STANDBY</div>
+          <button id="start-button" type="button">START RECEIVER</button>
+          <div class="start-error" id="start-error"></div>
+        </div>
+      </div>
+
+      <!-- ===== 개발용 보조 버튼 (전시 모드에서 숨김) ===== -->
+      <div id="controls">
+        <button type="button" data-cmd="toggleFullscreen" title="전체화면 (F)">⛶</button>
+        <button type="button" data-cmd="toggleDebug" title="디버그 (D)">i</button>
+      </div>
+
+      <!-- ===== 개발 진단 오버레이 ===== -->
+      <pre id="debug-overlay" hidden></pre>
+
+      <!-- ===== 치명적 오류 화면 ===== -->
+      <div id="fatal-screen" hidden>
+        <div class="start-label">NO SIGNAL</div>
+        <div class="fatal-detail" id="fatal-detail"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 라디오/효과음 (화면 밖, DOM 재사용) -->
+  <audio id="radio-player" preload="auto"></audio>
+  <audio id="fx-player" preload="auto"></audio>
+
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
