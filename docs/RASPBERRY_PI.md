@@ -113,7 +113,7 @@ dtoverlay=gpio-shutdown,gpio_pin=3
 
 새 보드 구매를 전제하지 않는다. 실측 순서:
 
-1. 실제 전시 파일 인코딩: **H.264 (High까지 가능, 권장 Main), 1024×600, 24~30fps,
+1. 실제 전시 파일 인코딩: **H.264 (High까지 가능, 권장 Main), 640×480(4:3), 24~30fps,
    3~5Mbps, AAC** — Pi 3의 하드웨어 H.264 디코더 범위
 2. placeholder(VP9)는 소프트웨어 디코딩이라 Pi 테스트에 쓰지 말 것
 3. 키오스크로 9시간 연속 실행, `vcgencmd measure_temp`로 온도(방열판·통풍 확보),

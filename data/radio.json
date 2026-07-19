@@ -1,10 +1,10 @@
 {
   "stations": [
-    { "id": "r01", "file": "radio_001.mp3", "country": "Korea",   "city": "Jeju",     "station": "제주 시그널",  "frequency": "89.1 MHz" },
-    { "id": "r02", "file": "radio_002.mp3", "country": "Japan",   "city": "Fukuoka",  "station": "FUKUOKA AM",  "frequency": "612 kHz" },
-    { "id": "r03", "file": "radio_003.mp3", "country": "France",  "city": "Paris",    "station": "RADIO SEINE", "frequency": "104.3 MHz" },
-    { "id": "r04", "file": "radio_004.mp3", "country": "Morocco", "city": "Tangier",  "station": "TANGER FM",   "frequency": "91.5 MHz" },
-    { "id": "r05", "file": "radio_005.mp3", "country": "Chile",   "city": "Valparaíso", "station": "ONDA PACÍFICO", "frequency": "96.7 MHz" }
+    { "id": "r01", "file": "radio_001.mp3", "country": "KR", "city": "Jeju",       "station": "RADIO JEJU",    "frequency": "89.1 FM" },
+    { "id": "r02", "file": "radio_002.mp3", "country": "JP", "city": "Fukuoka",    "station": "FUKUOKA AM",    "frequency": "612 AM" },
+    { "id": "r03", "file": "radio_003.mp3", "country": "FR", "city": "Paris",      "station": "RADIO SEINE",   "frequency": "104.3 FM" },
+    { "id": "r04", "file": "radio_004.mp3", "country": "MA", "city": "Tangier",    "station": "TANGER FM",     "frequency": "91.5 FM" },
+    { "id": "r05", "file": "radio_005.mp3", "country": "CL", "city": "Valparaíso", "station": "ONDA PACÍFICO", "frequency": "96.7 FM" }
   ],
   "effects": [
     "tuning_01.mp3",

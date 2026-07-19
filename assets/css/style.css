@@ -103,28 +103,35 @@ html, body {
 }
 .panel-main { flex: 1; min-width: 0; }
 .panel-row { display: flex; align-items: baseline; gap: 1cqw; white-space: nowrap; }
+.panel-row-header { margin-bottom: 1.4cqh; }
+.field-header {
+  color: var(--text-dim);
+  font-size: 2.2cqh;
+  letter-spacing: .3em;
+}
+.field-location {
+  color: var(--text-dim);
+  font-size: 3cqh;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  overflow: hidden; text-overflow: ellipsis;
+  max-width: 100%;
+}
 .field-station {
   color: var(--amber);
-  font-size: 4.6cqh;
+  font-size: 4.4cqh;
   letter-spacing: .06em;
   text-shadow: 0 0 1.4cqh rgba(232,176,74,.35);
   overflow: hidden; text-overflow: ellipsis;
   max-width: 100%;
+  margin-top: 0.6cqh;
 }
 .field-frequency {
   color: var(--amber-dim);
-  font-size: 3.2cqh;
-  letter-spacing: .1em;
+  font-size: 3cqh;
+  letter-spacing: .14em;
+  margin-top: 0.6cqh;
 }
-.panel-row-bottom { margin-top: 1.6cqh; }
-.field-location {
-  color: var(--text-dim);
-  font-size: 2.6cqh;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  overflow: hidden; text-overflow: ellipsis;
-}
-.field-sep { color: #33363c; }
 .field-signal { margin-left: auto; display: flex; align-items: flex-end; gap: 0.4cqw; height: 2.8cqh; }
 .field-signal i {
   display: block; width: 0.55cqw;
@@ -214,12 +221,15 @@ html, body {
   top: 0; bottom: 0;
 }
 
-/* 영상 화면: 854×480 비율 유지 */
+/* 영상 화면: 640×480 (4:3) 비율 정확히 유지, 1024×600 스테이지 안에 맞춤 */
 #video-area {
   position: absolute;
-  left: 0; right: 0; top: 7%;
-  aspect-ratio: 854 / 480;
-  max-height: 72%;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 70%;
+  aspect-ratio: 640 / 480;
+  max-width: 100%;
   background: #000;
   border: 0.4cqh solid #1c1e24;
   border-radius: 0.8cqh;
