@@ -217,19 +217,18 @@ html, body {
 /* ================= 오른쪽 섹션 ================= */
 #right-section {
   position: absolute;
-  left: 36.5%; right: 3.5%;
+  left: 36%; right: 1.5%;
   top: 0; bottom: 0;
 }
 
-/* 영상 화면: 640×480 (4:3) 비율 정확히 유지, 1024×600 스테이지 안에 맞춤 */
+/* 영상 화면: 1024×600 기준에서 정확히 640×480 픽셀 크기의 박스
+   (62.5cqw = 640/1024, 80cqh = 480/600 — 스테이지가 스케일되면 비례 유지) */
 #video-area {
   position: absolute;
-  top: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 70%;
-  aspect-ratio: 640 / 480;
-  max-width: 100%;
+  top: 2.5%;
+  left: 0;
+  width: 62.5cqw;
+  height: 80cqh;
   background: #000;
   border: 0.4cqh solid #1c1e24;
   border-radius: 0.8cqh;
@@ -254,8 +253,8 @@ html, body {
 /* 하단: video info + 토글 */
 #right-bottom {
   position: absolute;
-  left: 0; right: 0;
-  top: 79%; height: 14%;
+  left: 0; width: 62.5cqw;
+  top: 85.5%; height: 12%;
   display: flex; align-items: center; gap: 3%;
 }
 #video-info {
