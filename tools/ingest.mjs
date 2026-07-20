@@ -2,12 +2,16 @@
 // 실제 미디어 인제스트 파이프라인
 //
 //   1) incoming/videos/ 에 원본 영상(아무 형식), incoming/radio/ 에 원본 녹음을 넣는다
-//   2) node tools/ingest.mjs          ← 변환 + manifest 자동 갱신
-//      node tools/ingest.mjs --dry    ← 변환 없이 대상·예상 결과만 표시
+//   2) node tools/ingest.mjs                      ← 변환 + manifest 자동 갱신
+//      node tools/ingest.mjs --dry                ← 변환 없이 계획만 표시
+//      node tools/ingest.mjs --size 640x480       ← Raspberry Pi용 저해상도 빌드
 //   3) 앱 새로고침
 //
 // 하는 일:
-//   - 영상 → media/videos/video_NNN.mp4  (H.264 640×480 + AAC, Pi 하드웨어 디코딩 규격)
+//   - 영상 → media/videos/video_NNN.mp4  (H.264 + AAC, CRF 18 고화질)
+//     · 기본: 원본 해상도 유지 (데스크탑 고해상도 송출용 — 파일마다 화질 달라도 무방)
+//     · --size WxH: 해당 해상도로 축소 + 4:3 여백 패딩 (Pi 3는 1080p까지만
+//       하드웨어 디코딩되므로 전시 빌드는 --size 640x480 권장)
 //   - 녹음 → media/radio/radio_NNN.mp3   (128kbps)
 //   - data/videos.json / radio.json 재작성 (기존 파일은 .bak으로 백업)
 //   - 라디오 metadata(국가/도시/방송국/주파수)는 원본 파일명(source) 기준으로
@@ -23,6 +27,16 @@ import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const dry = process.argv.includes("--dry");
+
+// --size WxH → 축소 + 4:3 패딩 / 미지정 → 원본 해상도 유지
+const sizeArgIndex = process.argv.indexOf("--size");
+const sizeArg = sizeArgIndex > -1 ? process.argv[sizeArgIndex + 1] : null;
+let targetSize = null;
+if (sizeArg) {
+  const m = sizeArg.match(/^(\d+)x(\d+)$/i);
+  if (!m) { console.error(`--size 형식이 잘못됐습니다: "${sizeArg}" (예: --size 640x480)`); process.exit(1); }
+  targetSize = { w: Number(m[1]), h: Number(m[2]) };
+}
 
 const VIDEO_EXT = [".mp4", ".mov", ".mkv", ".webm", ".avi", ".m4v", ".mts"];
 const AUDIO_EXT = [".mp3", ".wav", ".m4a", ".aac", ".flac", ".ogg", ".wma", ".aif", ".aiff"];
@@ -72,25 +86,48 @@ if (!dry && !ffmpegExists()) {
 console.log(`영상 ${videosIn.length}개, 녹음 ${radioIn.length}개 발견${dry ? " (dry run — 변환 안 함)" : ""}\n`);
 
 // ---- 영상 변환 ----------------------------------------------
+function probeResolution(path) {
+  try {
+    const out = execFileSync("ffprobe", [
+      "-v", "error", "-select_streams", "v:0",
+      "-show_entries", "stream=width,height", "-of", "csv=p=0", path,
+    ]).toString().trim();
+    const [w, h] = out.split(",").map(Number);
+    return w && h ? { w, h } : null;
+  } catch { return null; }
+}
+
 const videoEntries = [];
+const overFullHD = [];
 if (videosIn.length) {
   for (const [i, src] of videosIn.entries()) {
     const out = `video_${pad3(i + 1)}.mp4`;
-    console.log(`영상: ${src} → media/videos/${out}`);
+    const res = ffmpegExists() ? probeResolution(join(root, "incoming/videos", src)) : null;
+    const resNote = res ? `  (원본 ${res.w}×${res.h})` : "";
+    if (!targetSize && res && (res.w > 1920 || res.h > 1080)) overFullHD.push(src);
+    console.log(`영상: ${src} → media/videos/${out}${resNote}`);
     if (!dry) {
+      const vf = targetSize
+        ? `scale=${targetSize.w}:${targetSize.h}:force_original_aspect_ratio=decrease,pad=${targetSize.w}:${targetSize.h}:(ow-iw)/2:(oh-ih)/2,format=yuv420p`
+        : "format=yuv420p"; // 원본 해상도 유지
       execFileSync("ffmpeg", [
         "-y", "-loglevel", "error",
         "-i", join(root, "incoming/videos", src),
-        "-vf", "scale=640:480:force_original_aspect_ratio=decrease,pad=640:480:(ow-iw)/2:(oh-ih)/2,format=yuv420p",
-        "-r", "24",
-        "-c:v", "libx264", "-profile:v", "main", "-b:v", "3M", "-maxrate", "4M", "-bufsize", "8M",
-        "-c:a", "aac", "-b:a", "128k",
+        "-vf", vf,
+        "-c:v", "libx264", "-profile:v", "high", "-crf", "18", "-preset", "medium",
+        "-c:a", "aac", "-b:a", "160k",
         "-movflags", "+faststart",
         join(root, "media/videos", out),
       ], { stdio: ["ignore", "inherit", "inherit"] });
     }
     videoEntries.push({ id: `v${pad3(i + 1)}`, file: out, label: parse(src).name, source: src });
   }
+}
+
+if (overFullHD.length) {
+  console.log(`\n⚠ 1080p 초과 원본 ${overFullHD.length}개 — 데스크탑 재생은 문제없지만,`);
+  console.log(`  Raspberry Pi 3는 1080p까지만 하드웨어 디코딩됩니다.`);
+  console.log(`  전시(Pi) 빌드 시에는 다음으로 다시 변환하세요: node tools/ingest.mjs --size 640x480`);
 }
 
 // ---- 라디오 변환 (기존 metadata를 source 기준으로 이어받음) ----
