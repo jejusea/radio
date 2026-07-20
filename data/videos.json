@@ -1,12 +1,12 @@
 [
-  { "id": "v01", "file": "video_001.webm", "label": "scene 01" },
-  { "id": "v02", "file": "video_002.webm", "label": "scene 02" },
-  { "id": "v03", "file": "video_003.webm", "label": "scene 03" },
-  { "id": "v04", "file": "video_004.webm", "label": "scene 04" },
-  { "id": "v05", "file": "video_005.webm", "label": "scene 05" },
-  { "id": "v06", "file": "video_006.webm", "label": "scene 06" },
-  { "id": "v07", "file": "video_007.webm", "label": "scene 07" },
-  { "id": "v08", "file": "video_008.webm", "label": "scene 08" },
-  { "id": "v09", "file": "video_009.webm", "label": "scene 09" },
-  { "id": "v10", "file": "video_010.webm", "label": "scene 10" }
+  { "id": "p001", "file": "photo_001.webm", "label": "photo 001" },
+  { "id": "p002", "file": "photo_002.webm", "label": "photo 002" },
+  { "id": "p003", "file": "photo_003.webm", "label": "photo 003" },
+  { "id": "p004", "file": "photo_004.webm", "label": "photo 004" },
+  { "id": "p005", "file": "photo_005.webm", "label": "photo 005" },
+  { "id": "p006", "file": "photo_006.webm", "label": "photo 006" },
+  { "id": "p007", "file": "photo_007.webm", "label": "photo 007" },
+  { "id": "p008", "file": "photo_008.webm", "label": "photo 008" },
+  { "id": "p009", "file": "photo_009.webm", "label": "photo 009" },
+  { "id": "p010", "file": "photo_010.webm", "label": "photo 010" }
 ]
