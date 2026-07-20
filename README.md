@@ -122,9 +122,13 @@ data/
 1. 원본 영상을 `incoming/videos/`에, 원본 녹음을 `incoming/radio/`에 넣는다
    (형식 자유: mp4/mov/wav/m4a 등, 파일명 자유 — 이름순으로 재생 순서가 된다)
 2. `node tools/ingest.mjs` 실행 (`--dry`로 계획만 미리보기)
-   - 영상 → `media/videos/video_NNN.mp4` (H.264 640×480 + AAC — Pi 하드웨어 디코딩 규격)
+   - 영상 → `media/videos/video_NNN.mp4` (H.264 고화질 CRF18 + AAC, **원본 해상도 유지**)
+     — 파일마다 해상도·화질이 달라도 무방하다. 앱이 640×480 박스에 알아서 맞춘다
    - 녹음 → `media/radio/radio_NNN.mp3` (128kbps)
    - `videos.json` / `radio.json` 자동 갱신 (이전 manifest는 `.bak`으로 백업)
+   - **전시(Raspberry Pi) 빌드**: `node tools/ingest.mjs --size 640x480`
+     — Pi 3는 1080p까지만 하드웨어 디코딩되므로 4K급 원본은 그대로 재생 불가.
+     데스크탑 데모는 원본 해상도, Pi에는 --size 빌드를 사용한다 (초과 시 경고 표시)
 3. `radio.json`에서 새 방송의 국가/도시/방송국/주파수를 채운다
    — **다시 인제스트해도 입력한 정보는 원본 파일명 기준으로 유지된다**
 4. 앱 새로고침
