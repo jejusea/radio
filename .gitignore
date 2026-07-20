@@ -1,3 +1,5 @@
 node_modules/
 data/*.draft.json
 .DS_Store
+incoming/
+data/*.bak

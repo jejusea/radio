@@ -115,9 +115,40 @@ data/
 개수는 어떤 재생 로직에도 하드코딩되어 있지 않다 (1개, 30개, 20개 모두 동작).
 항목이 있는데 파일이 없거나 손상된 경우, 해당 항목만 건너뛰고 앱은 계속 동작한다.
 
+### 실제 원본 파일 넣기 — 인제스트 파이프라인 (권장)
+
+원본을 직접 변환할 필요 없이, 아래 절차면 끝난다:
+
+1. 원본 영상을 `incoming/videos/`에, 원본 녹음을 `incoming/radio/`에 넣는다
+   (형식 자유: mp4/mov/wav/m4a 등, 파일명 자유 — 이름순으로 재생 순서가 된다)
+2. `node tools/ingest.mjs` 실행 (`--dry`로 계획만 미리보기)
+   - 영상 → `media/videos/video_NNN.mp4` (H.264 640×480 + AAC — Pi 하드웨어 디코딩 규격)
+   - 녹음 → `media/radio/radio_NNN.mp3` (128kbps)
+   - `videos.json` / `radio.json` 자동 갱신 (이전 manifest는 `.bak`으로 백업)
+3. `radio.json`에서 새 방송의 국가/도시/방송국/주파수를 채운다
+   — **다시 인제스트해도 입력한 정보는 원본 파일명 기준으로 유지된다**
+4. 앱 새로고침
+
+ffmpeg 필요: Windows `winget install ffmpeg` / macOS `brew install ffmpeg`.
+원본(incoming/)은 삭제되지 않으며 git에도 커밋되지 않는다.
+
+### 용량 가이드
+
+| 항목 | 대략 크기 | 예상 총량 |
+|---|---|---|
+| 영상 (640×480 H.264 3Mbps) | 분당 약 23MB | 30개 × 1분 ≈ 0.7GB |
+| 라디오 (MP3 128kbps) | 분당 약 1MB | 20개 × 10분 ≈ 0.2GB |
+
+- **로컬 실행(전시 본번)**: 수 GB여도 전혀 문제없다. 파일은 스트리밍 재생되고
+  전체를 메모리에 올리지 않는다.
+- **GitHub**: 파일당 100MB 제한, 저장소 1GB 권장 — 실제 전시 파일 전체를 올리는
+  용도로는 부적합. 실제 파일은 로컬에서 관리하고, GitHub/웹 데모에는 소량만 둔다.
+- 백업은 GitHub 대신 외장하드/클라우드 드라이브에 media 폴더째 복사가 간단하다.
+
 ### 도우미 스크립트
 
 ```
+node tools/ingest.mjs            # incoming/ 원본을 변환 + manifest 갱신 (위 참고)
 node tools/scan-media.mjs        # 폴더를 스캔해 manifest 초안(*.draft.json) 생성
 node tools/validate-manifest.mjs # JSON 문법·필수 필드·파일 존재 검사
 bash tools/generate-placeholders.sh  # placeholder 재생성 (ffmpeg 필요)
